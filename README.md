@@ -1,6 +1,6 @@
 # pytorch-ddqn
 
-Implementation of a simple ddqn agent using pytorch and the openai gym environments.
+Implementation of a simple ddqn agent using pytorch and the gymnasium (openai gym) environments. https://gymnasium.farama.org/
 
 # Train agent
 

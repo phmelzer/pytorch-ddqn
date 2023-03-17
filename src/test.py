@@ -2,7 +2,7 @@
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # tf info, warning and error messages are not printed
-import gym
+import gymnasium as gym
 import logging
 from logging import config
 import numpy as np
@@ -15,7 +15,10 @@ logging_config = utils.load_logging_config("../config/logging.yaml")
 
 
 def test():
-    env = gym.make(config["env_name"])
+    if config["render"]:
+        env = gym.make(config["env_name"], render_mode="human")
+    else:
+        env = gym.make(config["env_name"])
     agent = DDQNAgent(input_dims=env.observation_space.shape, n_actions=env.action_space.n, lr=config["learning_rate"],
                      discount_factor=config["discount_factor"], eps=config["eps"],
                      eps_dec=config["eps_dec"], eps_min=config["eps_min"],
@@ -35,12 +38,12 @@ def test():
     for i in range(config["test_episodes"]):
         done = False
         score = 0
-        observation = env.reset()
+        observation, info = env.reset()
         while not done:
             if config["render"]:
                 env.render()
             action = agent.choose_action(observation)
-            observation_, reward, done, info = env.step(action)
+            observation_, reward, done, truncated, info = env.step(action)
             score += reward
             observation = observation_
 
